@@ -30,20 +30,27 @@
 sudo apt update
 sudo apt install -y ecryptfs-utils
 
-sudo adduser --encrypt-home usertest
-su - usertest
-touch readme
+#sudo adduser --encrypt-home cryptouser
+sudo adduser cryptouser
+sudo usermod -aG sudo cryptouser
+
+su - cryptouser
+pwd
+touch readmefile
+#ls -al /home/cryptouser
+ls -al ~
 exit
 
-sudo ls /home/usertest/
+sudo ls -al /home/cryptouser
+sudo ecryptfs-migrate-home -u cryptouser #Миграция домашнего каталога пользователя cryptouser
+sudo ls -al /home/cryptouser
 
-#Миграция домашнего каталога пользователя:
-sudo ecryptfs-migrate-home -u user
-#Шифрование раздела swap:
-sudo ecryptfs-setup-swap
-#Информация для восстановления:
-ecryptfs-unwrap-passphrase
+ecryptfs-unwrap-passphrase #Информация для восстановления
 ```
+**Скриншот выполнения ls -al /home/cryptouser до шифрования**
+![Скриншот выполнения ls -al /home/cryptouser до шифрования](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-1-1.png "ССкриншот выполнения ls -al /home/cryptouser до шифрования")
+**Скриншот выполнения ls -al /home/cryptouser после шифрования**
+![Скриншот выполнения ls -al /home/cryptouser после шифрования](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-1-2.png "Скриншот выполнения ls -al /home/cryptouser после шифрования")
 
 ---
 
