@@ -101,21 +101,33 @@ sudo cryptsetup luksClose disk #Закрываем раздел
 *В качестве ответа пришлите снимки экрана с поэтапным выполнением задания.*
 
 ```bash
-sudo apt install -y apparmor-profiles apparmor-utils apparmor-profiles-extra
-sudo apparmor_status
+sudo apt list apparmor-profiles apparmor-utils apparmor-profiles-extra #apparmor уже установлен
+#sudo apt install -y apparmor-profiles apparmor-utils apparmor-profiles-extra
+sudo aa-status
+#sudo apparmor_status
+sudo systemctl status apparmor.service
+
+#sudo service apparmor stop
+sudo systemctl stop apparmor.service
+sudo aa-teardown
 
 sudo cp /usr/bin/man /usr/bin/man1
 sudo cp /bin/ping /usr/bin/man
-sudo man -c 2 localhost
-sudo aa-enforce man
-sudo man -c 2 localhost
+sudo getcap $(which ping)
+sudo getcap $(which man)
+sudo setcap cap_net_raw+ep $(which man)
 
-sudo service apparmor stop
-sudo service apparmor teardown
+ping -c 1 localhost
+man -c 1 localhost
+sudo aa-enforce man
+man -c 1 localhost
+
 sudo mv /usr/bin/man1 /usr/bin/man
-sudo apt purge -y apparmor-profiles apparmor-utils apparmor-profiles-extra
 ```
 **Скриншот поэтапного выполнения**
-![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-3.png "Скриншот поэтапного выполнения")
-
+![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-3-1.png "Скриншот поэтапного выполнения")
+**Скриншот поэтапного выполнения (продолжение)**
+![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-3-2.png "Скриншот поэтапного выполнения")
+**Скриншот поэтапного выполнения (продолжение)**
+![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-3-3.png "Скриншот поэтапного выполнения")
 ---
