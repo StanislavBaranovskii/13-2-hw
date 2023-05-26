@@ -63,26 +63,31 @@ ecryptfs-unwrap-passphrase #Информация для восстановлен
 *В качестве ответа пришлите снимки экрана с поэтапным выполнением задания.*
 
 ```bash
-sudo apt install gparted
-#Установка LUKS (должна быть установлено по умолчанию):
-sudo apt-get install cryptsetup
-#Проверка установки:
+apt list gparted cryptsetup #LUKS (gparted) и cryptsetup установлены по умолчанию
+#sudo apt install -y gparted cryptsetup
 cryptsetup --version
-#Подготовка раздела (luksFormat):
-sudo cryptsetup -y -v --type luks2 luksFormat /dev/sdb1
-#Монтирование раздела:
-sudo cryptsetup luksOpen /dev/sdb1 disk
+
+sudo fdisk -l #Определяем подключенную флешку
+mount #Если флешка подмонтирована - отключаем
+sudo umount /dev/sdb4 
+sudo cryptsetup -y -v --type luks2 luksFormat /dev/sdb4 #Подготавливаем раздел (luksFormat)
+sudo cryptsetup luksOpen /dev/sdb4 disk #Открываем раздел
 ls /dev/mapper/disk
-#Форматирование раздела:
+
 sudo dd if=/dev/zero of=/dev/mapper/disk
 sudo mkfs.ext4 /dev/mapper/disk
-#Монтирование «открытого» раздела:
-mkdir .secret
-sudo mount /dev/mapper/disk .secret/
-#Завершение работы:
+
+mkdir .secret 
+sudo mount /dev/mapper/disk .secret/ #Монтируем раздел
+
 sudo umount .secret
-sudo cryptsetup luksClose disk
+sudo cryptsetup luksClose disk #Закрываем раздел
 ```
+
+**Скриншот поэтапного выполнения**
+![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-2-1.png "Скриншот поэтапного выполнения")
+**Скриншот поэтапного выполнения (продолжение)**
+![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-2-2.png "Скриншот поэтапного выполнения")
 
 ---
 
@@ -95,3 +100,22 @@ sudo cryptsetup luksClose disk
 
 *В качестве ответа пришлите снимки экрана с поэтапным выполнением задания.*
 
+```bash
+sudo apt install -y apparmor-profiles apparmor-utils apparmor-profiles-extra
+sudo apparmor_status
+
+sudo cp /usr/bin/man /usr/bin/man1
+sudo cp /bin/ping /usr/bin/man
+sudo man -c 2 localhost
+sudo aa-enforce man
+sudo man -c 2 localhost
+
+sudo service apparmor stop
+sudo service apparmor teardown
+sudo mv /usr/bin/man1 /usr/bin/man
+sudo apt purge -y apparmor-profiles apparmor-utils apparmor-profiles-extra
+```
+**Скриншот поэтапного выполнения**
+![Скриншот поэтапного выполнения](https://github.com/StanislavBaranovskii/13-2-hw/blob/main/img/13-2-3.png "Скриншот поэтапного выполнения")
+
+---
